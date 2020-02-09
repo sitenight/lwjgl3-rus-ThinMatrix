@@ -31,7 +31,7 @@ public class DisplayManager {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // окно будет скрыто после создания
         glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // окно будет изменяемого размера
         // Задается минимальная требуемая версия OpenGL. 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Мажорная
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // Мажорная
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2); // Минорная
         // Установка профайла для которого создается контекст
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
