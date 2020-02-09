@@ -1,0 +1,16 @@
+#vertex 400 core
+
+// получаем позиции вершин из VAO
+in vec3 position;
+
+// вывод цвета вершины в другой шейдер
+out vec3 colour;
+
+void main()
+{
+    // визуализируем вершину в форме (x, y, z, w)
+    gl_Position = vec4(position, 1.0);
+
+    // формируем цвет для передачи в фрагментный шейдер
+    colour = vec3(position.x + 0.5, 1.0, position.y + 0.5);
+}
