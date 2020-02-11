@@ -1,10 +1,12 @@
-package tutorial05.engineTester;
+ package tutorial06.engineTester;
 
-import tutorial05.renderEngine.DisplayManager;
-import tutorial05.renderEngine.Loader;
-import tutorial05.renderEngine.RawModel;
-import tutorial05.renderEngine.Renderer;
-import tutorial05.shaders.StaticShader;
+import tutorial06.renderEngine.DisplayManager;
+import tutorial06.renderEngine.Loader;
+import tutorial06.models.RawModel;
+import tutorial06.models.TexturedModel;
+import tutorial06.renderEngine.Renderer;
+import tutorial06.shaders.StaticShader;
+import tutorial06.textures.ModelTexture;
 
 /**
  * Основной цикл игры
@@ -32,13 +34,17 @@ public class MainGameLoop {
         
         // загружаем массив вершин и индексов в модель
         RawModel model = loader.loadToVao(vertices, indices);
+        // загрузим текстуру используя загрузчик
+        ModelTexture texture = new ModelTexture(loader.loadTexture("res/tutorial06/image.png"));
+        // Создание текстурной модели
+        TexturedModel texturedModel = new TexturedModel(model, texture);
         
         // запускаем цикл пока пользователь не закроет окно
         while (DisplayManager.shouldDisplayClose()) {            
             renderer.prepare(); // подготовка окна для рисования кадра
             
             shader.start(); // запускаем шейдер статических моделей
-            renderer.render(model); // рисуем модель
+            renderer.render(texturedModel); // рисуем модель
             shader.stop(); // останавливаем шейдер статических моделей
             
             DisplayManager.updateDisplay();

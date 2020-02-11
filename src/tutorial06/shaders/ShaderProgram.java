@@ -1,4 +1,4 @@
-package tutorial05.shaders;
+package tutorial06.shaders;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
