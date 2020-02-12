@@ -43,6 +43,8 @@ public abstract class ShaderProgram {
         GL20.glAttachShader(programId, vertexShaderId);
         GL20.glAttachShader(programId, fragmentShaderId);
         
+        bindAttributes();
+        
         // присоединяем шейдерную программу
         GL20.glLinkProgram(programId);
         if(GL20.glGetProgrami(programId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE)
@@ -52,8 +54,6 @@ public abstract class ShaderProgram {
         GL20.glValidateProgram(programId);
         if(GL20.glGetProgrami(programId, GL20.GL_VALIDATE_STATUS) == GL11.GL_FALSE)
             System.err.println("Ошибка проверки шейдерной программы: " + GL20.glGetProgramInfoLog(programId, 1024));
-        
-        bindAttributes();
     }
     
     /**
