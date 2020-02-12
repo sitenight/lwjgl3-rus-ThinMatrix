@@ -1,0 +1,17 @@
+#version 400 core
+
+// получаем позиции вершин из VAO
+in vec3 position;
+// получаем текстурные координаты из VAO
+in vec2 textureCoords;
+
+// отправляем в фрагментный шейдер текстурные координаты
+out vec2 pass_textureCoords;
+
+void main()
+{
+    // визуализируем вершину в форме (x, y, z, w)
+    gl_Position = vec4(position, 1.0);
+
+    pass_textureCoords = textureCoords;
+}
