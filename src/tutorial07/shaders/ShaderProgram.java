@@ -5,11 +5,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.FloatBuffer;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
 
 /**
  * Общая шейдерная программа содержащая все атрибуты и методы, которые
@@ -54,6 +59,22 @@ public abstract class ShaderProgram {
         GL20.glValidateProgram(programId);
         if(GL20.glGetProgrami(programId, GL20.GL_VALIDATE_STATUS) == GL11.GL_FALSE)
             System.err.println("Ошибка проверки шейдерной программы: " + GL20.glGetProgramInfoLog(programId, 1024));
+        
+        getAllUniformLocations();
+    }
+    
+    /**
+     * Получение всех юниформ
+     */
+    protected abstract void getAllUniformLocations();
+    
+    /**
+     * Регистрируем имя юниформы для шейдерной программы
+     * @param uniformName имя юниформы
+     * @return идентификатор юниформы
+     */
+    protected int getUniformLocation(String uniformName) {
+        return GL20.glGetUniformLocation(programId, uniformName);
     }
     
     /**
@@ -68,6 +89,65 @@ public abstract class ShaderProgram {
      */
     protected void bindAttribute(int attributeNumber, String variableName) {
         GL20.glBindAttribLocation(programId, attributeNumber, variableName);
+    }
+    
+    /**
+     * Загрузка float переменной в юниформу
+     * @param location идентификатор юниформы
+     * @param value значение
+     */
+    protected void loadFloat(int location, float value) {
+        GL20.glUniform1f(location, value);
+    }
+
+    /**
+     * Загрузка int переменной в юниформу
+     * @param location идентификатор юниформы
+     * @param value значение
+     */
+    protected void loadInt(int location, int value) {
+        GL20.glUniform1i(location, value);
+    }
+
+    /**
+     * Загрузка Vector3f переменной в юниформу
+     * @param location идентификатор юниформы
+     * @param vector значение
+     */
+    protected void loadVector(int location, Vector3f vector) {
+        GL20.glUniform3f(location, vector.x, vector.y, vector.z);
+    }
+
+    /**
+     * Загрузка Vector2f переменной в юниформу
+     * @param location идентификатор юниформы
+     * @param vector значение
+     */
+    protected void loadVector(int location, Vector2f vector) {
+        GL20.glUniform2f(location, vector.x, vector.y );
+    }
+
+    /**
+     * Загрузка float переменной в юниформу
+     * @param location идентификатор юниформы
+     * @param value значение
+     */
+    protected void loadBoolean(int location, boolean value) {
+        GL20.glUniform1f(location, value ? 1 : 0);
+    }
+
+    /**
+     * Загрузка Vector3f переменной в юниформу
+     * @param location идентификатор юниформы
+     * @param matrix матрица с данными
+     */
+    protected void loadMatrix(int location, Matrix4f matrix) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            // Дамп матрицы в Float буффер
+            FloatBuffer fb = stack.mallocFloat(16);
+            matrix.get(fb);
+            GL20.glUniformMatrix4fv(location, false, fb);
+        }
     }
     
     /**

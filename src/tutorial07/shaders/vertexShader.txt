@@ -8,6 +8,9 @@ in vec2 textureCoords;
 // отправляем в фрагментный шейдер текстурные координаты
 out vec2 pass_textureCoords;
 
+// матрица трансформации
+uniform mat4 transformationMatrix;
+
 void main()
 {
     // визуализируем вершину в форме (x, y, z, w)
