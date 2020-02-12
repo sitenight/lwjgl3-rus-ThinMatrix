@@ -32,8 +32,15 @@ public class MainGameLoop {
             3, 1, 2, // Нижний правый треугольник
         };
         
-        // загружаем массив вершин и индексов в модель
-        RawModel model = loader.loadToVao(vertices, indices);
+        float[] textureCoords = {
+            0.0f, 0.0f, // V0
+            0.0f, 1.0f, // V1
+            1.0f, 1.0f, // V2
+            1.0f, 0.0f, // V3
+        };
+        
+        // загружаем массив вершин, текстурных координат и индексов в память GPU
+        RawModel model = loader.loadToVao(vertices, textureCoords, indices);
         // загрузим текстуру используя загрузчик
         ModelTexture texture = new ModelTexture(loader.loadTexture("res/tutorial06/image.png"));
         // Создание текстурной модели

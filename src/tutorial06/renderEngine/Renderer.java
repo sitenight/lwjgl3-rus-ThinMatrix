@@ -2,6 +2,7 @@ package tutorial06.renderEngine;
 
 import tutorial06.models.RawModel;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import tutorial06.models.TexturedModel;
@@ -28,8 +29,14 @@ public class Renderer {
         
         // Связываем VAO модели, указываем что будем работать с этими данными
         GL30.glBindVertexArray(model.getVaoId());
-        // Активируем нулевой список атрибутов (мы туда загрузили ранее координаты вершин)
-        GL20.glEnableVertexAttribArray(0);
+        // Активируем нулевой списки атрибутов
+        GL20.glEnableVertexAttribArray(0); // координаты вершин
+        GL20.glEnableVertexAttribArray(1); // текстурные координаты
+        
+        // Активируем текстурный блок перед привязкой текстуры
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        // Привяжем её, чтобы функции, использующие текстуры, знали какую текстуру использовать
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturedModel.getTexture().getId());
         
         // Рисуем примитивы. Аргументы:
         // - тип примитива (в данном случаем треугольники)
@@ -40,6 +47,7 @@ public class Renderer {
         
         // т.к. закончили использовать нулевой список атрибутов, то отключаем
         GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
         // отвязываем VAO модели
         GL30.glBindVertexArray(0);
     }

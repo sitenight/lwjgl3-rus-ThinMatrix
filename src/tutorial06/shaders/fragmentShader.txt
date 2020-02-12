@@ -1,12 +1,15 @@
 #version 400 core
 
-// получаем цвета вершины
-in vec3 colour;
+// получаем текстурные координаты
+in vec2 pass_textureCoords;
 
 out vec4 fragColor;
 
+uniform sampler2D textureSampler;
+
 void main()
 {
-    // формируем цвет пикселя 
-    fragColor = vec4(colour, 1.0)/3.0;
+    // метод texture координату точки на модели сопоставляет с координатой точи на текстуре
+    // и возвращает цвет пикселя 
+    fragColor = texture(textureSampler, pass_textureCoords);
 }

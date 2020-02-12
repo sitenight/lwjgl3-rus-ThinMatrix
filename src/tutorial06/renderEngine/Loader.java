@@ -31,13 +31,18 @@ public class Loader {
     /**
      * Загрузка координат вершин в VAO
      * @param positions положение вершин модели
+     * @param textureCoords текстурные координаты
+     * @param indices индексы вершин
      * @return загруженную модель
      */
-    public RawModel loadToVao(float[] positions, int[] indices) {
+    public RawModel loadToVao(float[] positions, float[] textureCoords, int[] indices) {
         int vaoId = createVao(); // получаем новый идетификатор VAO
         bindIndicesBuffer(indices); // загружаем и привязываем наши индексы вершин
-        // сохраняем в нулевой список атрибутов VAO данные
-        storeDataInAttributeList(0, positions);
+        // сохраняем список атрибутов VAO данные
+        // VAO #0 имеет 3х мерные Векторы(xyz), позиции вершин
+        storeDataInAttributeList(0, 3, positions); 
+        // VAO #1 имеет 2х мерные Векторы(uv), текстурные координаты
+        storeDataInAttributeList(1, 2, textureCoords); 
         unbindVao(); // отвязываем VAO
         // возвращаем загруженную модель: id и количество вершин
         return new RawModel(vaoId, indices.length);
@@ -74,9 +79,10 @@ public class Loader {
     /**
      * Хранение данных в одном списке атрибутов VAO
      * @param attributeNumber номер в списке атрибутов VAO
+     * @param coordinateSize размер компонента (для вершины нужно 3(xyz), для тектурной координаты 2(uv))
      * @param data массив данных
      */
-    private void storeDataInAttributeList(int attributeNumber, float[] data) {
+    private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data) {
         int vboId = GL15.glGenBuffers(); // инициализация пустого VBO
         vbos.add(vboId); // добавляем в список очередной идентификатор VBO
         // Указываем OpenGL, что сейчас мы будем что-то делать вот с этим VBO
@@ -91,10 +97,10 @@ public class Loader {
         // Откуда брать данные для массива атрибутов, а также в каком формате эти данные находятся
         // Аргументы: 
         // - номер списка атрибутов VAO
-        // - размер компонента (в данном случае 3 float)
+        // - размер компонента (для вершины нужно 3(xyz), для тектурной координаты 2(uv))
         // - тип компонента
         // - остальные normalized, stride и pointer
-        GL20.glVertexAttribPointer(attributeNumber, 3, GL11.GL_FLOAT, false, 0, 0);   
+        GL20.glVertexAttribPointer(attributeNumber, coordinateSize, GL11.GL_FLOAT, false, 0, 0);   
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0); // отвязываем VBO
     }
     
