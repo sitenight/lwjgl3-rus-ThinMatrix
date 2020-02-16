@@ -1,21 +1,35 @@
-package tutorial07.renderEngine;
+package tutorial08.renderEngine;
 
 import org.joml.Matrix4f;
+import tutorial08.models.RawModel;
+import tutorial08.models.TexturedModel;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import tutorial07.entities.Entity;
-import tutorial07.shaders.StaticShader;
-import tutorial07.toolbox.Maths;
-import tutorial07.models.RawModel;
-import tutorial07.models.TexturedModel;
+import tutorial08.shaders.StaticShader;
+import tutorial08.entities.Entity;
+import tutorial08.toolbox.Maths;
 
 /**
  * Визуализация данных
  */
 public class Renderer {
+    
+    /** Поле зрения: Угол поля зрения в радианах */
+    private static final float FOV = (float) Math.toRadians(60.0f);    
+    /** Расстояние до ближней плоскости */
+    private static final float Z_NEAR = 0.01f;    
+    /** Расстояние до дальней плоскости */
+    private static final float Z_FAR = 1000.f;
 
+    public Renderer(StaticShader shader) {
+        shader.start();
+        shader.loadProjectionMatrix(new Matrix4f().identity()
+                    .setPerspective(FOV, DisplayManager.WINDOW_WIDTH/ DisplayManager.WINDOW_HEIGHT, Z_NEAR, Z_FAR));
+        shader.stop();
+    }
+    
     /**
      * Вызввается каждый кадр данный метод.
      */

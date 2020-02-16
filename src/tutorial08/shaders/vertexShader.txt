@@ -10,11 +10,13 @@ out vec2 pass_textureCoords;
 
 // матрица трансформации
 uniform mat4 transformationMatrix;
+// матрица проекции
+uniform mat4 projectionMatrix;
 
 void main()
 {
-    // высчитываем новое положение вершины, в зависимости от трансформации
-    gl_Position = transformationMatrix * vec4(position, 1.0);
+    // высчитываем новое положение вершины, в зависимости от трансформации и проекции
+    gl_Position = projectionMatrix * transformationMatrix * vec4(position, 1.0);
 
     pass_textureCoords = textureCoords;
 }

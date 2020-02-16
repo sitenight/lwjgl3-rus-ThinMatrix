@@ -1,6 +1,6 @@
-package tutorial07.models;
+package tutorial08.models;
 
-import tutorial07.textures.ModelTexture;
+import tutorial08.textures.ModelTexture;
 
 /**
  * Класс Текстурированной модели.

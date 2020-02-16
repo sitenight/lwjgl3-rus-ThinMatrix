@@ -1,7 +1,6 @@
-package tutorial07.renderEngine;
+package tutorial08.renderEngine;
 
-import tutorial07.models.RawModel;
-import tutorial07.textures.Texture;
+import tutorial08.models.RawModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.FloatBuffer;
@@ -15,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import tutorial08.textures.Texture;
 
 /**
  * Загружает 3д модели в память, путем сохранения позиционных данных вершин модели в VAO

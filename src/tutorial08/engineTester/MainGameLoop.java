@@ -1,15 +1,14 @@
- package tutorial07.engineTester;
+ package tutorial08.engineTester;
 
 import org.joml.Vector3f;
-import tutorial07.entities.Entity;
-import tutorial07.renderEngine.DisplayManager;
-import tutorial07.renderEngine.Loader;
-import tutorial07.models.RawModel;
-import tutorial07.models.TexturedModel;
-import tutorial07.renderEngine.Renderer;
-import tutorial07.shaders.StaticShader;
-import tutorial07.textures.ModelTexture;
-import tutorial07.toolbox.Maths;
+import tutorial08.entities.Entity;
+import tutorial08.renderEngine.DisplayManager;
+import tutorial08.renderEngine.Loader;
+import tutorial08.models.RawModel;
+import tutorial08.models.TexturedModel;
+import tutorial08.renderEngine.Renderer;
+import tutorial08.shaders.StaticShader;
+import tutorial08.textures.ModelTexture;
 
 /**
  * Основной цикл игры
@@ -20,8 +19,8 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         
         Loader loader = new Loader(); // загрузчик моделей
-        Renderer renderer = new Renderer(); // визуализатор моделей
         StaticShader shader = new StaticShader(); // шейдер статических моделей
+        Renderer renderer = new Renderer(shader); // визуализатор моделей
         
         float[] vertices = {
             -0.5f,  0.5f, 0f, // V0
@@ -50,12 +49,14 @@ public class MainGameLoop {
         TexturedModel staticModel = new TexturedModel(model, texture);
         
         Entity entity = new Entity(staticModel, 
-                new Vector3f(0, 0, 0), 
+                new Vector3f(-0.4f, 0, 0), 
                 0, 0, 30, 
                 1.0f);
         
         // запускаем цикл пока пользователь не закроет окно
-        while (DisplayManager.shouldDisplayClose()) {       
+        while (DisplayManager.shouldDisplayClose()) {     
+            entity.increacePosition(0, 0, -0.1f);
+            
             renderer.prepare(); // подготовка окна для рисования кадра
             
             shader.start(); // запускаем шейдер статических моделей
