@@ -6,6 +6,7 @@ in vec2 pass_textureCoords;
 out vec4 fragColor;
 
 uniform sampler2D textureSampler;
+uniform vec3 lightColour; // цвет источника света
 
 void main()
 {

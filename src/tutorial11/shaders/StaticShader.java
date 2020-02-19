@@ -2,6 +2,7 @@ package tutorial11.shaders;
 
 import org.joml.Matrix4f;
 import tutorial11.entities.Camera;
+import tutorial11.entities.Light;
 import tutorial11.toolbox.Maths;
 
 /**
@@ -20,6 +21,9 @@ public class StaticShader extends ShaderProgram {
     // идентификатор юниформы матрицы вида
     private int location_viewMatrix;
     
+    private int location_lightPosition; // позиция источника света
+    private int location_lightColour; // цвет источника света
+    
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
@@ -37,6 +41,8 @@ public class StaticShader extends ShaderProgram {
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
         location_projectionMatrix = super.getUniformLocation("projectionMatrix");
         location_viewMatrix = super.getUniformLocation("viewMatrix");
+        location_lightPosition = super.getUniformLocation("lightPosition");
+        location_lightColour = super.getUniformLocation("lightColour");
     }
     
     /**
@@ -45,6 +51,15 @@ public class StaticShader extends ShaderProgram {
      */
     public void loadTransformationMatrix(Matrix4f matrix) {
         super.loadMatrix(location_transformationMatrix, matrix);
+    }
+    
+    /**
+     * Загрузка позиции и цвета источника света, в юниформу
+     * @param light источник света
+     */
+    public void loadViewMatrix(Light light) {
+        super.loadVector(location_lightPosition, light.getPosition());
+        super.loadVector(location_lightColour, light.getColour());
     }
     
     /**

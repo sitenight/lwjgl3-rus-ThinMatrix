@@ -14,6 +14,7 @@ uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 // матрица вида
 uniform mat4 viewMatrix;
+uniform vec3 lightPosition; // позиция источника света
 
 void main()
 {
