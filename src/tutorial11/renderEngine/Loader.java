@@ -32,10 +32,12 @@ public class Loader {
      * Загрузка координат вершин в VAO
      * @param positions положение вершин модели
      * @param textureCoords текстурные координаты
+     * @param normals векторы нормали
      * @param indices индексы вершин
      * @return загруженную модель
      */
-    public RawModel loadToVao(float[] positions, float[] textureCoords, int[] indices) {
+    public RawModel loadToVao(float[] positions, float[] textureCoords, 
+            float[] normals, int[] indices) {
         int vaoId = createVao(); // получаем новый идетификатор VAO
         bindIndicesBuffer(indices); // загружаем и привязываем наши индексы вершин
         // сохраняем список атрибутов VAO данные
@@ -43,6 +45,8 @@ public class Loader {
         storeDataInAttributeList(0, 3, positions); 
         // VAO #1 имеет 2х мерные Векторы(uv), текстурные координаты
         storeDataInAttributeList(1, 2, textureCoords); 
+        // VAO #2 имеет 3х мерные Векторы(xyz), векторы нормали
+        storeDataInAttributeList(2, 3, normals);
         unbindVao(); // отвязываем VAO
         // возвращаем загруженную модель: id и количество вершин
         return new RawModel(vaoId, indices.length);

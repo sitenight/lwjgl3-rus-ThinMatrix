@@ -54,6 +54,7 @@ public class Renderer {
         // Активируем нулевой списки атрибутов
         GL20.glEnableVertexAttribArray(0); // координаты вершин
         GL20.glEnableVertexAttribArray(1); // текстурные координаты
+        GL20.glEnableVertexAttribArray(2); // векторы нормали
         
         // создадим матрицу преобразования  и передадим преобразования 
         Matrix4f transformationMatrix = Maths.getTransformationMatrix(
@@ -80,6 +81,7 @@ public class Renderer {
         // т.к. закончили использовать нулевой список атрибутов, то отключаем
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
         // отвязываем VAO модели
         GL30.glBindVertexArray(0);
     }

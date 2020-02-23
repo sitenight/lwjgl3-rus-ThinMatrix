@@ -33,6 +33,7 @@ public class StaticShader extends ShaderProgram {
         // связываем списки атрибутов VAO с шейдером 
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoords");
+        super.bindAttribute(2, "normal");
     }
 
     @Override
@@ -57,7 +58,7 @@ public class StaticShader extends ShaderProgram {
      * Загрузка позиции и цвета источника света, в юниформу
      * @param light источник света
      */
-    public void loadViewMatrix(Light light) {
+    public void loadLight(Light light) {
         super.loadVector(location_lightPosition, light.getPosition());
         super.loadVector(location_lightColour, light.getColour());
     }
