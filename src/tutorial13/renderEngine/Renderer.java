@@ -25,6 +25,8 @@ public class Renderer {
     private static final float Z_FAR = 1000.f;
 
     public Renderer(StaticShader shader) {
+        GL11.glEnable(GL11.GL_CULL_FACE); // включаем отсечение невидимых поверхностей
+        GL11.glCullFace(GL11.GL_BACK); // отсекаем заднюю сторону поверхности
         shader.start();
         shader.loadProjectionMatrix(new Matrix4f().identity()
                     .setPerspective(FOV, DisplayManager.WINDOW_WIDTH/ DisplayManager.WINDOW_HEIGHT, Z_NEAR, Z_FAR));
