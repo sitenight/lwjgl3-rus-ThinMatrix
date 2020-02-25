@@ -8,6 +8,8 @@ out vec4 fragColor;
 
 uniform sampler2D textureSampler;
 uniform vec3 lightColour; // цвет источника света
+uniform float shineDamper; // коэффициент блеска материала
+uniform float reflectivity; // отражательная способность материала
 
 void main()
 {

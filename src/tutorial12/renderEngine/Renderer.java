@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import tutorial12.shaders.StaticShader;
 import tutorial12.entities.Entity;
+import tutorial12.textures.ModelTexture;
 import tutorial12.toolbox.Maths;
 
 /**
@@ -65,6 +66,10 @@ public class Renderer {
                 entity.getScale());
         // передача преобразований в шейдер
         shader.loadTransformationMatrix(transformationMatrix);
+        
+        // загрузка переменных отражения
+        ModelTexture texture = model.getTexture();
+        shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
         
         // Активируем текстурный блок перед привязкой текстуры
         GL13.glActiveTexture(GL13.GL_TEXTURE0);

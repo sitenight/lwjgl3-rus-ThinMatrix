@@ -24,6 +24,9 @@ public class StaticShader extends ShaderProgram {
     private int location_lightPosition; // позиция источника света
     private int location_lightColour; // цвет источника света
     
+    private int location_shineDamper; // коэффициент блеска материала
+    private int location_reflectivity; // отражательная способность материала
+    
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
     }
@@ -38,12 +41,14 @@ public class StaticShader extends ShaderProgram {
 
     @Override
     protected void getAllUniformLocations() {
-        // регестрируем юниформы
+        // регистрируем юниформы
         location_transformationMatrix = super.getUniformLocation("transformationMatrix");
         location_projectionMatrix = super.getUniformLocation("projectionMatrix");
         location_viewMatrix = super.getUniformLocation("viewMatrix");
         location_lightPosition = super.getUniformLocation("lightPosition");
         location_lightColour = super.getUniformLocation("lightColour");
+        location_shineDamper = super.getUniformLocation("shineDamper");
+        location_reflectivity = super.getUniformLocation("reflectivity");
     }
     
     /**
@@ -61,6 +66,16 @@ public class StaticShader extends ShaderProgram {
     public void loadLight(Light light) {
         super.loadVector(location_lightPosition, light.getPosition());
         super.loadVector(location_lightColour, light.getColour());
+    }
+    
+    /**
+     * Загрузка переменных блеска/отражения
+     * @param damper коэффициент блеска материала
+     * @param reflectivity отражательная способность материала
+     */
+    public void loadShineVariables(float damper, float reflectivity) {
+        super.loadFloat(location_shineDamper, damper);
+        super.loadFloat(location_reflectivity, reflectivity);
     }
     
     /**
