@@ -1,5 +1,7 @@
 package tutorial13.renderEngine;
 
+import java.util.List;
+import java.util.Map;
 import org.joml.Matrix4f;
 import tutorial13.models.RawModel;
 import tutorial13.models.TexturedModel;
@@ -23,8 +25,11 @@ public class Renderer {
     private static final float Z_NEAR = 0.01f;    
     /** Расстояние до дальней плоскости */
     private static final float Z_FAR = 1000.f;
+    
+    private StaticShader shader;
 
     public Renderer(StaticShader shader) {
+        this.shader = shader;
         GL11.glEnable(GL11.GL_CULL_FACE); // включаем отсечение невидимых поверхностей
         GL11.glCullFace(GL11.GL_BACK); // отсекаем заднюю сторону поверхности
         shader.start();
@@ -44,12 +49,32 @@ public class Renderer {
     }
     
     /**
-     * Визуализация объекта
-     * @param entity объект в пространстве
-     * @param shader какой статический шейдер применить к модели
+     * Визуализация списка текстурированных моделей
+     * @param entities список моделей
      */
-    public void render(Entity entity, StaticShader shader) {
-        TexturedModel model = entity.getModel(); // текстурированная модель
+    public void render(Map<TexturedModel, List<Entity>> entities) {
+        for (TexturedModel model : entities.keySet()) { // для каждой модели
+            prepareTexturedModel(model); // подготавливаем текстурированную модель
+            List<Entity> batch = entities.get(model); // получаем все сущности
+            for (Entity entity : batch) { // проходимся по каждому объекту
+                prepareInstance(entity); // подготавливаем объект
+                
+                // Рисуем примитивы. Аргументы:
+                // - тип примитива (в данном случаем треугольники)
+                // - количество вершин в модели
+                // - указываем тип индексов данных в памяти
+                // - смещение
+                GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+            }
+            unbindTexturedModel();
+        }
+    }
+    
+    /**
+     * Подготовка текстурированной модели к визуализации
+     * @param model текстурированная модель
+     */
+    private void prepareTexturedModel(TexturedModel model) {
         RawModel rawModel = model.getRawModel(); // данные модели
         
         // Связываем VAO модели, указываем что будем работать с этими данными
@@ -59,6 +84,33 @@ public class Renderer {
         GL20.glEnableVertexAttribArray(1); // текстурные координаты
         GL20.glEnableVertexAttribArray(2); // векторы нормали
         
+        // загрузка переменных отражения
+        ModelTexture texture = model.getTexture();
+        shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
+        
+        // Активируем текстурный блок перед привязкой текстуры
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        // Привяжем её, чтобы функции, использующие текстуры, знали какую текстуру использовать
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
+    }
+    
+    /**
+     * Открепление текстурированной модели
+     */
+    private void unbindTexturedModel() {
+        // т.к. закончили использовать нулевой список атрибутов, то отключаем
+        GL20.glDisableVertexAttribArray(0);
+        GL20.glDisableVertexAttribArray(1);
+        GL20.glDisableVertexAttribArray(2);
+        // отвязываем VAO модели
+        GL30.glBindVertexArray(0);
+    }
+    
+    /**
+     * Подготовка экземпляра объекта
+     * @param entity экземпляра объекта
+     */
+    private void prepareInstance(Entity entity) {
         // создадим матрицу преобразования  и передадим преобразования 
         Matrix4f transformationMatrix = Maths.getTransformationMatrix(
                 entity.getPosition(), 
@@ -68,28 +120,5 @@ public class Renderer {
                 entity.getScale());
         // передача преобразований в шейдер
         shader.loadTransformationMatrix(transformationMatrix);
-        
-        // загрузка переменных отражения
-        ModelTexture texture = model.getTexture();
-        shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
-        
-        // Активируем текстурный блок перед привязкой текстуры
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        // Привяжем её, чтобы функции, использующие текстуры, знали какую текстуру использовать
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getId());
-        
-        // Рисуем примитивы. Аргументы:
-        // - тип примитива (в данном случаем треугольники)
-        // - количество вершин в модели
-        // - указываем тип индексов данных в памяти
-        // - смещение
-        GL11.glDrawElements(GL11.GL_TRIANGLES, rawModel.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
-        
-        // т.к. закончили использовать нулевой список атрибутов, то отключаем
-        GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
-        GL20.glDisableVertexAttribArray(2);
-        // отвязываем VAO модели
-        GL30.glBindVertexArray(0);
     }
 }
