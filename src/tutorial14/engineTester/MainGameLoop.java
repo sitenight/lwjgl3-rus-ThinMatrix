@@ -13,7 +13,7 @@ import tutorial14.models.RawModel;
 import tutorial14.models.TexturedModel;
 import tutorial14.renderEngine.MasterRenderer;
 import tutorial14.renderEngine.OBJLoader;
-import tutorial14.renderEngine.Renderer;
+import tutorial14.renderEngine.EntityRenderer;
 import tutorial14.shaders.StaticShader;
 import tutorial14.textures.ModelTexture;
 

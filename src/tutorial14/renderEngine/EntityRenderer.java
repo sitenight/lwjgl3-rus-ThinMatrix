@@ -17,35 +17,15 @@ import tutorial14.toolbox.Maths;
 /**
  * Визуализация данных
  */
-public class Renderer {
-    
-    /** Поле зрения: Угол поля зрения в радианах */
-    private static final float FOV = (float) Math.toRadians(60.0f);    
-    /** Расстояние до ближней плоскости */
-    private static final float Z_NEAR = 0.01f;    
-    /** Расстояние до дальней плоскости */
-    private static final float Z_FAR = 1000.f;
+public class EntityRenderer {
     
     private StaticShader shader;
 
-    public Renderer(StaticShader shader) {
+    public EntityRenderer(StaticShader shader, Matrix4f projectionMatrix) {
         this.shader = shader;
-        GL11.glEnable(GL11.GL_CULL_FACE); // включаем отсечение невидимых поверхностей
-        GL11.glCullFace(GL11.GL_BACK); // отсекаем заднюю сторону поверхности
         shader.start();
-        shader.loadProjectionMatrix(new Matrix4f().identity()
-                    .setPerspective(FOV, DisplayManager.WINDOW_WIDTH/ DisplayManager.WINDOW_HEIGHT, Z_NEAR, Z_FAR));
+        shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
-    }
-    
-    /**
-     * Вызввается каждый кадр данный метод.
-     */
-    public void prepare() {
-        GL11.glEnable(GL11.GL_DEPTH_TEST); // включаем тест глубины
-        // Очистка экрана и буфера глубины, а также рисование цветом в цветовом буфере
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
-        GL11.glClearColor(0.51f, 0.71f, 0.87f, 0.0f); // Загрузка выбранного цвета в цветовой буфер
     }
     
     /**
