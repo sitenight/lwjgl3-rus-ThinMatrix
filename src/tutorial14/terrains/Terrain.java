@@ -97,7 +97,4 @@ public class Terrain {
     public ModelTexture getTexture() {
         return texture;
     }
-    
-    
-    
 }

@@ -1,0 +1,37 @@
+#version 400 core
+
+// получаем позиции вершин из VAO
+in vec3 position;
+// получаем текстурные координаты из VAO
+in vec2 textureCoords;
+// получаем вектор нормали из VAO
+in vec3 normal;
+
+// отправляем в фрагментный шейдер
+out vec2 pass_textureCoords; // текстурные координаты
+out vec3 surfaceNormal; // нормаль поверхности
+out vec3 toLightVector; // вектор направленный на источник света
+out vec3 toCameraVector; // вектор положения камеры
+
+// матрица трансформации
+uniform mat4 transformationMatrix;
+// матрица проекции
+uniform mat4 projectionMatrix;
+// матрица вида
+uniform mat4 viewMatrix;
+uniform vec3 lightPosition; // позиция источника света
+
+void main()
+{
+    vec4 worldPosition = transformationMatrix * vec4(position, 1.0);
+    // высчитываем новое положение вершины, в зависимости от трансформации и проекции
+    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+
+    pass_textureCoords = textureCoords * 40.0;
+    // применяем трансформацию к нормали
+    surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
+    toLightVector = lightPosition - worldPosition.xyz;
+
+    // положение камеры относительно вершины
+    toCameraVector = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
+}

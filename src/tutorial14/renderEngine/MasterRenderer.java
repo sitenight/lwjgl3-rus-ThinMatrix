@@ -11,6 +11,8 @@ import tutorial14.entities.Entity;
 import tutorial14.entities.Light;
 import tutorial14.models.TexturedModel;
 import tutorial14.shaders.StaticShader;
+import tutorial14.shaders.TerrainShader;
+import tutorial14.terrains.Terrain;
 
 public class MasterRenderer {
     
@@ -28,8 +30,15 @@ public class MasterRenderer {
     /** Визуализация */
     private EntityRenderer renderer;
     
+    /** Визуализация ландшафта */
+    private TerrainRenderer terrainRenderer;
+    /** Шейдер ландшафта */
+    private TerrainShader terrainShader = new TerrainShader();
+    
     /** содержит все текстурированные модели для визуализации */
     private Map<TexturedModel, List<Entity>> entities = new HashMap<>();
+    /** содержит все ландшафты игрового мира */
+    private List<Terrain> terrains = new ArrayList<>();
 
     public MasterRenderer() {
         GL11.glEnable(GL11.GL_CULL_FACE); // включаем отсечение невидимых поверхностей
@@ -40,6 +49,7 @@ public class MasterRenderer {
             .setPerspective(FOV, DisplayManager.WINDOW_WIDTH/ DisplayManager.WINDOW_HEIGHT, Z_NEAR, Z_FAR);
         
         renderer = new EntityRenderer(shader, projectionMatrix);
+        terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
     }
     
     /**
@@ -54,7 +64,25 @@ public class MasterRenderer {
         shader.loadViewMatrix(camera); // обновляем матрицу вида относительно положения камеры
         renderer.render(entities); // визуализация списка моделей
         shader.stop(); // останавливаем шейдер статических моделей
+        
+        // ландшафт
+        terrainShader.start();
+        terrainShader.loadLight(sun);
+        terrainShader.loadViewMatrix(camera);
+        terrainRenderer.render(terrains);
+        terrainShader.stop();
+        
+        terrains.clear();
         entities.clear();
+    }
+    
+    /**
+     * Добавление ландшафта к списку ландшафтов
+     * @param terrain ландшафт
+     */
+    public void processTerrain(Terrain terrain) {
+        terrains.add(terrain);
+        
     }
     
     /**
@@ -75,7 +103,7 @@ public class MasterRenderer {
     }
     
     /**
-     * Вызввается каждый кадр данный метод.
+     * Вызывается каждый кадр данный метод.
      */
     public void prepare() {
         GL11.glEnable(GL11.GL_DEPTH_TEST); // включаем тест глубины
@@ -89,5 +117,6 @@ public class MasterRenderer {
      */
     public void cleanUp() {
         shader.cleanUp();
+        terrainShader.cleanUp();
     }
 }
