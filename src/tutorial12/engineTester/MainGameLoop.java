@@ -29,6 +29,10 @@ public class MainGameLoop {
         RawModel model = OBJLoader.loadObjModel("res/tutorial11/dragon.obj", loader);
         // загрузим текстуру используя загрузчик
         ModelTexture texture = new ModelTexture(loader.loadTexture("res/tutorial11/dragon.png"));
+        // Установка переменных блеска
+        texture.setShineDamper(20);
+        texture.setReflectivity(1f);
+
         // Создание текстурной модели
         TexturedModel staticModel = new TexturedModel(model, texture);
         
