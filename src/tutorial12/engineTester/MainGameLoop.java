@@ -26,9 +26,9 @@ public class MainGameLoop {
         Renderer renderer = new Renderer(shader); // визуализатор моделей
         
         // загружаем модель в память OpenGL
-        RawModel model = OBJLoader.loadObjModel("res/tutorial12/dragon.obj", loader);
+        RawModel model = OBJLoader.loadObjModel("res/tutorial11/dragon.obj", loader);
         // загрузим текстуру используя загрузчик
-        ModelTexture texture = new ModelTexture(loader.loadTexture("res/tutorial12/dragon.png"));
+        ModelTexture texture = new ModelTexture(loader.loadTexture("res/tutorial11/dragon.png"));
         // Создание текстурной модели
         TexturedModel staticModel = new TexturedModel(model, texture);
         
