@@ -1,4 +1,4 @@
-package tutorial14.renderEngine;
+package tutorial15.renderEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
-import tutorial14.entities.Camera;
-import tutorial14.entities.Entity;
-import tutorial14.entities.Light;
-import tutorial14.models.TexturedModel;
-import tutorial14.shaders.StaticShader;
-import tutorial14.shaders.TerrainShader;
-import tutorial14.terrains.Terrain;
+import tutorial15.entities.Camera;
+import tutorial15.entities.Entity;
+import tutorial15.entities.Light;
+import tutorial15.models.TexturedModel;
+import tutorial15.shaders.StaticShader;
+import tutorial15.shaders.TerrainShader;
+import tutorial15.terrains.Terrain;
 
 public class MasterRenderer {
     

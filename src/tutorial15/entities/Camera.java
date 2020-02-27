@@ -1,8 +1,8 @@
-package tutorial14.entities;
+package tutorial15.entities;
 
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import tutorial14.io.Keyboard;
+import tutorial15.io.Keyboard;
 
 /**
  * Класс симуляции камеры
