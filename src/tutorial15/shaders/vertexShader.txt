@@ -20,6 +20,7 @@ uniform mat4 projectionMatrix;
 // матрица вида
 uniform mat4 viewMatrix;
 uniform vec3 lightPosition; // позиция источника света
+uniform float useFakeLighting; // использование фальшивого освещения
 
 void main()
 {
@@ -27,9 +28,15 @@ void main()
     // высчитываем новое положение вершины, в зависимости от трансформации и проекции
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
+    vec3 actualNormal = normal; // актуальный вектор нормали
+    // если использовать фальшивое освещение, то вектор нормали направим вверх
+    if(useFakeLighting > 0.5) {
+        actualNormal = vec3(0.0,1.0,0.0);
+    }
+
     pass_textureCoords = textureCoords;
     // применяем трансформацию к нормали
-    surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
+    surfaceNormal = (transformationMatrix * vec4(actualNormal, 0.0)).xyz;
     toLightVector = lightPosition - worldPosition.xyz;
 
     // положение камеры относительно вершины

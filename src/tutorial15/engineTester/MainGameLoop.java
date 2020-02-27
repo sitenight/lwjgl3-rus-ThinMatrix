@@ -33,9 +33,12 @@ public class MainGameLoop {
         // трава
         TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("res/tutorial15/grassModel.obj", loader), new ModelTexture(
                 loader.loadTexture("res/tutorial15/grassTexture.png")));
+        grass.getTexture().setHasTransparency(true); // включаем прозрачность текстур
+        grass.getTexture().setUseFakeLighting(true);
         // папоротник
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("res/tutorial15/fern.obj", loader), new ModelTexture(
                 loader.loadTexture("res/tutorial15/fern.png")));
+        fern.getTexture().setHasTransparency(true); // включаем прозрачность текстур
         
         List<Entity> entities = new ArrayList<>();
         Random random = new Random();

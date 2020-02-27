@@ -12,11 +12,31 @@ public class ModelTexture {
     private float shineDamper = 1;
     /** отражательная способность(0 - нет отражения) */
     private float reflectivity = 0;
+    /** имеет ли прозрачность текстура */
+    private boolean hasTransparency = false;
+    /** использование фальшивого освещения */
+    private boolean useFakeLighting = false;
 
     public ModelTexture(int textureId) {
         this.textureId = textureId;
     }
 
+    public boolean isUseFakeLighting() {
+        return useFakeLighting;
+    }
+
+    public void setUseFakeLighting(boolean useFakeLighting) {
+        this.useFakeLighting = useFakeLighting;
+    }
+
+    public boolean isHasTransparency() {
+        return hasTransparency;
+    }
+
+    public void setHasTransparency(boolean hasTransparency) {
+        this.hasTransparency = hasTransparency;
+    }
+    
     public int getId() {
         return textureId;
     }

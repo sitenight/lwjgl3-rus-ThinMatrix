@@ -66,6 +66,11 @@ public class EntityRenderer {
         
         // загрузка переменных отражения
         ModelTexture texture = model.getTexture();
+        // отключение отсечения задних граней если текстура с прозрачностью
+        if(texture.isHasTransparency())
+            MasterRenderer.disableCulling();
+        // загрузка фальшивого освещения
+        shader.loadFakeLightingVariable(texture.isUseFakeLighting());
         shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
         
         // Активируем текстурный блок перед привязкой текстуры
@@ -78,6 +83,8 @@ public class EntityRenderer {
      * Открепление текстурированной модели
      */
     private void unbindTexturedModel() {
+        // включение отсечения задних граней 
+        MasterRenderer.enableCulling();
         // т.к. закончили использовать нулевой список атрибутов, то отключаем
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);

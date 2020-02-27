@@ -41,8 +41,7 @@ public class MasterRenderer {
     private List<Terrain> terrains = new ArrayList<>();
 
     public MasterRenderer() {
-        GL11.glEnable(GL11.GL_CULL_FACE); // включаем отсечение невидимых поверхностей
-        GL11.glCullFace(GL11.GL_BACK); // отсекаем заднюю сторону поверхности
+        enableCulling(); // отсекаем задние поверхности по-умолчанию
         
         // генерируем матрицу проэкции
         projectionMatrix = new Matrix4f().identity()
@@ -50,6 +49,21 @@ public class MasterRenderer {
         
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+    }
+    
+    /**
+     * Включение отсечения невидимых задних поверхностей
+     */
+    public static void enableCulling() {
+        GL11.glEnable(GL11.GL_CULL_FACE); 
+        GL11.glCullFace(GL11.GL_BACK); 
+    }
+    
+    /**
+     * Выключение отсечения невидимых задних поверхностей
+     */
+    public static void disableCulling() {
+        GL11.glDisable(GL11.GL_CULL_FACE);  
     }
     
     /**

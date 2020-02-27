@@ -37,7 +37,11 @@ void main()
     vec3 finalSpecular = dampedFactor * reflectivity * lightColour;
 
     // метод texture координату точки на модели сопоставляет с координатой точи на текстуре
-    // и возвращает цвет пикселя 
-    fragColor = vec4(diffuse, 1.0) * texture(textureSampler, pass_textureCoords) 
-       + vec4(finalSpecular, 1.0);
+    vec4 textureColour = texture(textureSampler, pass_textureCoords);
+    // если прозрачность пикселя(альфа-канал) меньше 0.5
+    if(textureColour.a < 0.5) {
+        discard; // запрещаем вывод пикселя
+    }
+    
+    fragColor = vec4(diffuse, 1.0) * textureColour + vec4(finalSpecular, 1.0);
 }
