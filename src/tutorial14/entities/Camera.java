@@ -19,7 +19,7 @@ public class Camera {
     private float roll;
 
     public Camera() {
-        this.position = new Vector3f(0, 0, 0);
+        this.position = new Vector3f(0, 5, 0);
     }
     
     /**

@@ -25,28 +25,33 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         
         Loader loader = new Loader(); // загрузчик моделей
+       
+        // Загрузка текстурных моделей
+        // дерево
+        TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("res/tutorial15/tree.obj", loader), 
+                new ModelTexture(loader.loadTexture("res/tutorial15/tree.png")));
+        // трава
+        TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("res/tutorial15/grassModel.obj", loader), new ModelTexture(
+                loader.loadTexture("res/tutorial15/grassTexture.png")));
+        // папоротник
+        TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("res/tutorial15/fern.obj", loader), new ModelTexture(
+                loader.loadTexture("res/tutorial15/fern.png")));
         
-        // загружаем модель в память OpenGL
-        RawModel model = OBJLoader.loadObjModel("res/tutorial14/tree.obj", loader);
-        // загрузим текстуру используя загрузчик
-        ModelTexture texture = new ModelTexture(loader.loadTexture("res/tutorial14/tree.png"));
-        // Установка переменных блеска
-        texture.setShineDamper(20);
-        texture.setReflectivity(0f);
-
-        // Создание текстурной модели
-        TexturedModel staticModel = new TexturedModel(model, texture);
-        
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
         Random random = new Random();
         for(int i=0;i<500;i++){
-            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat()*800 - 400,0,random.nextFloat() * -600),0,0,0,3));
+            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat()*800 - 400,0,
+                    random.nextFloat() * -600),0,0,0,3));
+            entities.add(new Entity(grass, new Vector3f(random.nextFloat()*800 - 400,0,
+                    random.nextFloat() * -600),0,0,0,1));
+            entities.add(new Entity(fern, new Vector3f(random.nextFloat()*800 - 400,0,
+                    random.nextFloat() * -600),0,0,0,0.6f));
         }
         // создание источника света
-        Light light = new Light(new Vector3f(3000, 2000, 3000), new Vector3f(1, 1, 1));
+        Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
         
         Terrain terrain = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("res/tutorial14/grass.png")));
-        Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("res/tutorial14/grassFlowers.png")));
+        Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("res/tutorial14/grass.png")));
         
         Camera camera = new Camera();
         
