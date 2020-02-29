@@ -1,22 +1,22 @@
-package tutorial16.engineTester;
+package tutorial17.engineTester;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.joml.Vector3f;
-import tutorial16.entities.Camera;
-import tutorial16.entities.Entity;
-import tutorial16.entities.Light;
-import tutorial16.renderEngine.DisplayManager;
-import tutorial16.renderEngine.Loader;
-import tutorial16.models.RawModel;
-import tutorial16.models.TexturedModel;
-import tutorial16.objConverter.ModelData;
-import tutorial16.objConverter.OBJFileLoader;
-import tutorial16.renderEngine.MasterRenderer;
-import tutorial16.renderEngine.OBJLoader;
-import tutorial16.terrains.Terrain;
-import tutorial16.textures.ModelTexture;
+import tutorial17.entities.Camera;
+import tutorial17.entities.Entity;
+import tutorial17.entities.Light;
+import tutorial17.renderEngine.DisplayManager;
+import tutorial17.renderEngine.Loader;
+import tutorial17.models.RawModel;
+import tutorial17.models.TexturedModel;
+import tutorial17.objConverter.ModelData;
+import tutorial17.objConverter.OBJFileLoader;
+import tutorial17.renderEngine.MasterRenderer;
+import tutorial17.renderEngine.OBJLoader;
+import tutorial17.terrains.Terrain;
+import tutorial17.textures.ModelTexture;
 
 /**
  * Основной цикл игры
