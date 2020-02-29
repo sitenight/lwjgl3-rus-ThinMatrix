@@ -1,20 +1,20 @@
-package tutorial15.engineTester;
+package tutorial16.engineTester;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.joml.Vector3f;
-import tutorial15.entities.Camera;
-import tutorial15.entities.Entity;
-import tutorial15.entities.Light;
-import tutorial15.renderEngine.DisplayManager;
-import tutorial15.renderEngine.Loader;
-import tutorial15.models.RawModel;
-import tutorial15.models.TexturedModel;
-import tutorial15.renderEngine.MasterRenderer;
-import tutorial15.renderEngine.OBJLoader;
-import tutorial15.terrains.Terrain;
-import tutorial15.textures.ModelTexture;
+import tutorial16.entities.Camera;
+import tutorial16.entities.Entity;
+import tutorial16.entities.Light;
+import tutorial16.renderEngine.DisplayManager;
+import tutorial16.renderEngine.Loader;
+import tutorial16.models.RawModel;
+import tutorial16.models.TexturedModel;
+import tutorial16.renderEngine.MasterRenderer;
+import tutorial16.renderEngine.OBJLoader;
+import tutorial16.terrains.Terrain;
+import tutorial16.textures.ModelTexture;
 
 /**
  * Основной цикл игры
