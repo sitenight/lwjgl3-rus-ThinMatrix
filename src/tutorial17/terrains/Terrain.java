@@ -3,6 +3,8 @@ package tutorial17.terrains;
 import tutorial17.models.RawModel;
 import tutorial17.renderEngine.Loader;
 import tutorial17.textures.ModelTexture;
+import tutorial17.textures.TerrainTexture;
+import tutorial17.textures.TerrainTexturePack;
 
 /**
  * Класс который представляет ландшафт в нашей игре
@@ -19,7 +21,8 @@ public class Terrain {
     private float z;
     
     private RawModel model; // сетка ландшафта
-    private ModelTexture texture; // текстура ландшафта
+    private TerrainTexturePack texturePack; // пак текстур ландшафта
+    private TerrainTexture blendMap; // карта смешения текстур
 
     /**
      * Конструктор ландшафта
@@ -28,8 +31,10 @@ public class Terrain {
      * @param loader загрузчик
      * @param texture текстура
      */
-    public Terrain(int gridX, int gridZ, Loader loader, ModelTexture texture) {
-        this.texture = texture;
+    public Terrain(int gridX, int gridZ, Loader loader, 
+            TerrainTexturePack texturePack, TerrainTexture blendMap) {
+        this.texturePack = texturePack;
+        this.blendMap = blendMap;
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
         this.model = generateTerrain(loader);
@@ -94,7 +99,11 @@ public class Terrain {
         return model;
     }
 
-    public ModelTexture getTexture() {
-        return texture;
+    public TerrainTexturePack getTexturePack() {
+        return texturePack;
+    }
+
+    public TerrainTexture getBlendMap() {
+        return blendMap;
     }
 }

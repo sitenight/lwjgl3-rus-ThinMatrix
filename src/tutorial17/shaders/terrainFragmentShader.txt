@@ -25,14 +25,14 @@ void main()
     vec2 tiledCoords = pass_textureCoords * 40.0;
     // получаем цвет пикселя карты смешивания
     vec4 blendMapColour = texture(blendMap, pass_textureCoords);
-    // рассчитываем видимость фоновой текстуры с карты смешевания
+    // рассчитываем видимость фоновой текстуры с карты смешивания
     float backTextureAmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
     vec4 backgroundTextureColour = texture(backgroundTexture,tiledCoords) * backTextureAmount;
-    // рассчитываем видимость текстуры красного цвета с карты смешевания
+    // рассчитываем видимость текстуры красного цвета с карты смешивания
     vec4 rTextureColour = texture(rTexture,tiledCoords) * blendMapColour.r;
-    // рассчитываем видимость текстуры красного цвета с карты смешевания
+    // рассчитываем видимость текстуры красного цвета с карты смешивания
     vec4 gTextureColour = texture(gTexture,tiledCoords) * blendMapColour.g;
-    // рассчитываем видимость текстуры красного цвета с карты смешевания
+    // рассчитываем видимость текстуры красного цвета с карты смешивания
     vec4 bTextureColour = texture(bTexture,tiledCoords) * blendMapColour.b;
     
     // рассчет окончательного цвета с текстур

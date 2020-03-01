@@ -13,6 +13,7 @@ import tutorial17.models.TexturedModel;
 import tutorial17.shaders.TerrainShader;
 import tutorial17.terrains.Terrain;
 import tutorial17.textures.ModelTexture;
+import tutorial17.textures.TerrainTexturePack;
 import tutorial17.toolbox.Maths;
 
 /**
@@ -26,7 +27,8 @@ public class TerrainRenderer {
     public TerrainRenderer(TerrainShader shader, Matrix4f projectionMatrix) {
         this.shader = shader;
         shader.start();
-        shader.loadProjectionMatrix(projectionMatrix);
+        shader.loadProjectionMatrix(projectionMatrix); // загружаем матрицу проекции
+        shader.connectTextureUnits(); // соединяем текстуры с текстурными блокаим
         shader.stop();
     }
     
@@ -58,14 +60,34 @@ public class TerrainRenderer {
         GL20.glEnableVertexAttribArray(1); // текстурные координаты
         GL20.glEnableVertexAttribArray(2); // векторы нормали
         
-        // загрузка переменных отражения
-        ModelTexture texture = terrain.getTexture();
-        shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
+        bindTexture(terrain);
+        // загрузка переменных отражения        
+        shader.loadShineVariables(1, 0); // пока небудет блеска на ландшафте
         
+    }
+    
+    /**
+     * Привязываем текстуры ландшафта 
+     * @param terrain ландшафт с заданными текстурами
+     */
+    private void bindTexture(Terrain terrain) {
+        TerrainTexturePack texturePack = terrain.getTexturePack();         
         // Активируем текстурный блок перед привязкой текстуры
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        // Привяжем её, чтобы функции, использующие текстуры, знали какую текстуру использовать
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getId());
+        // Привяжем к текстурному блоку 0 фоновую текстуру
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getBackgroundTexture().getTextureID());
+        // Привяжем к текстурному блоку 1 текстуру красного цвета
+        GL13.glActiveTexture(GL13.GL_TEXTURE1);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getrTexture().getTextureID());
+        // Привяжем к текстурному блоку 2 текстуру зеленого цвета
+        GL13.glActiveTexture(GL13.GL_TEXTURE2);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getgTexture().getTextureID());
+        // Привяжем к текстурному блоку 3 текстуру синего цвета
+        GL13.glActiveTexture(GL13.GL_TEXTURE3);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePack.getbTexture().getTextureID());
+        // Привяжем к текстурному блоку 4 текстуру карты смешевания текстур
+        GL13.glActiveTexture(GL13.GL_TEXTURE4);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, terrain.getBlendMap().getTextureID());
     }
     
     /**
