@@ -33,7 +33,7 @@ void main()
     // высчитываем новое положение вершины, в зависимости от трансформации и проекции
     gl_Position = projectionMatrix * positionRelativeToCam;
 
-    pass_textureCoords = textureCoords * 40.0;
+    pass_textureCoords = textureCoords;
     // применяем трансформацию к нормали
     surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
     toLightVector = lightPosition - worldPosition.xyz;
