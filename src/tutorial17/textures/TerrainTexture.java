@@ -1,5 +1,8 @@
 package tutorial17.textures;
 
+/**
+ * Представления текстуры ландшафта
+ */
 public class TerrainTexture {
 
     /** идентификатор текстур */

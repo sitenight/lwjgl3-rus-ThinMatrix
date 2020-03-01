@@ -29,7 +29,8 @@ public class Terrain {
      * @param gridX позиция по оси Х в мире
      * @param gridZ позиция по оси Z в мире
      * @param loader загрузчик
-     * @param texture текстура
+     * @param texturePack пак текстур ландшафта
+     * @param blendMap карта смешения текстур
      */
     public Terrain(int gridX, int gridZ, Loader loader, 
             TerrainTexturePack texturePack, TerrainTexture blendMap) {
