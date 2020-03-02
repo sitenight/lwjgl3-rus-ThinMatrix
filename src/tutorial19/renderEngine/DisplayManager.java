@@ -1,11 +1,11 @@
-package tutorial18.renderEngine;
+package tutorial19.renderEngine;
 
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.*;
-import tutorial18.io.Keyboard;
-import tutorial18.io.Mouse;
+import tutorial19.io.Keyboard;
+import tutorial19.io.Mouse;
 
 /**
  * Управление дисплеем

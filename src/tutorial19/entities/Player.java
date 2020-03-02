@@ -1,4 +1,4 @@
-package tutorial18.entities;
+package tutorial19.entities;
 
 import org.joml.Vector3f;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
@@ -10,9 +10,9 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
-import tutorial18.io.Keyboard;
-import tutorial18.models.TexturedModel;
-import tutorial18.renderEngine.DisplayManager;
+import tutorial19.io.Keyboard;
+import tutorial19.models.TexturedModel;
+import tutorial19.renderEngine.DisplayManager;
 
 /**
  * Класс игрока
