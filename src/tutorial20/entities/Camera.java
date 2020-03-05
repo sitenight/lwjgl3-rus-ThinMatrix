@@ -1,8 +1,8 @@
-package tutorial19.entities;
+package tutorial20.entities;
 
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import tutorial19.io.Mouse;
+import tutorial20.io.Mouse;
 
 /**
  * Класс симуляции камеры

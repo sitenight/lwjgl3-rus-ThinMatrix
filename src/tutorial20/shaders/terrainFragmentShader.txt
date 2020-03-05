@@ -1,0 +1,68 @@
+#version 400 core
+
+in vec2 pass_textureCoords; // текстурные координаты
+in vec3 surfaceNormal; // нормаль поверхности
+in vec3 toLightVector; // вектор направленный на источник света
+in vec3 toCameraVector; // вектор положения камеры
+in float visibility; // видимость вершины для тумана
+
+out vec4 fragColor;
+
+uniform sampler2D backgroundTexture; // основная текстура, черный цвет
+uniform sampler2D rTexture; // текстура для красного цвета
+uniform sampler2D gTexture; // текстура для зеленого цвета
+uniform sampler2D bTexture; // текстура для синего цвета
+uniform sampler2D blendMap; // текстура карты смешивания
+
+uniform vec3 lightColour; // цвет источника света
+uniform float shineDamper; // коэффициент блеска материала
+uniform float reflectivity; // отражательная способность материала
+uniform vec3 skyColour; // цвет тумана/неба
+
+void main()
+{
+    // вычисляем координаты текстуры плитки
+    vec2 tiledCoords = pass_textureCoords * 40.0;
+    // получаем цвет пикселя карты смешивания
+    vec4 blendMapColour = texture(blendMap, pass_textureCoords);
+    // рассчитываем видимость фоновой текстуры с карты смешивания
+    float backTextureAmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
+    vec4 backgroundTextureColour = texture(backgroundTexture,tiledCoords) * backTextureAmount;
+    // рассчитываем видимость текстуры красного цвета с карты смешивания
+    vec4 rTextureColour = texture(rTexture,tiledCoords) * blendMapColour.r;
+    // рассчитываем видимость текстуры красного цвета с карты смешивания
+    vec4 gTextureColour = texture(gTexture,tiledCoords) * blendMapColour.g;
+    // рассчитываем видимость текстуры красного цвета с карты смешивания
+    vec4 bTextureColour = texture(bTexture,tiledCoords) * blendMapColour.b;
+    
+    // рассчет окончательного цвета с текстур
+    vec4 totalColour = backgroundTextureColour + rTextureColour + gTextureColour + bTextureColour;
+
+    // нормализируем данные
+    vec3 unitNormal = normalize(surfaceNormal);
+    vec3 unitLight = normalize(toLightVector);
+    vec3 unitVectorCamera = normalize(toCameraVector);
+
+    // вычисляем скалярную разницу между векторами
+    float nDotl = dot(unitNormal,unitLight);
+    float brightness = max(nDotl, 0.2); // яркость пикселя от 0.2 до 1
+    vec3 diffuse = brightness * lightColour; // фоновый свет
+
+    vec3 lightDirection = -unitLight; // противоположность вектору света
+    // расчет вектора отражения
+    vec3 reflectedLightDirection = reflect(lightDirection,unitNormal);
+    
+    // расчет яркости отражения, вектор отражения к вектору камеры
+    float specularFactor = dot(reflectedLightDirection, unitVectorCamera);
+    specularFactor = max(specularFactor, 0.0); // отсекаем отрицательные значения
+    // рассчитываем зеркальный коэффициент 
+    float dampedFactor = pow(specularFactor,shineDamper);
+    // рассчитываем зеркальный эффект
+    vec3 finalSpecular = dampedFactor * reflectivity * lightColour;
+
+    // метод texture координату точки на модели сопоставляет с координатой точи на текстуре
+    // и возвращает цвет пикселя 
+    fragColor = vec4(diffuse, 1.0) * totalColour + vec4(finalSpecular, 1.0);
+    // туман. Смешиваем 2 цвета с интенсивностью
+    fragColor = mix(vec4(skyColour,1.0),fragColor, visibility); 
+}
