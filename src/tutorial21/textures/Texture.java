@@ -1,4 +1,4 @@
-package tutorial20.textures;
+package tutorial21.textures;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
