@@ -17,7 +17,7 @@ public class Terrain {
 
     /** Размер ландшафта */
     private static final float SIZE = 800;
-    /** Максимальная высота карты */
+    /** Максимальная высота карты, минимальная будет также но со знаком минуса */
     private static final int MAX_HEIGHT = 40;
     /** Цвет пикселя для максимальной высоты */
     private static final int MAX_PIXEL_COLOUR = 256 * 256 * 256;
@@ -55,16 +55,16 @@ public class Terrain {
      * @return сгенерированую модель ландшафта 
      */
     private RawModel generateTerrain(Loader loader, String heightMap){
+        // загрузка файла карты высот
         BufferedImage image = null;
-
         try {
             image = ImageIO.read(new File(heightMap));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assert image != null;
+        assert image != null; // проверка на корректность загрузки файла
         
-        int VERTEX_COUNT = image.getHeight();
+        int VERTEX_COUNT = image.getHeight(); // кол-во вершин одной стороны ландшафта
         
         int count = VERTEX_COUNT * VERTEX_COUNT; // количество вершин
         float[] vertices = new float[count * 3];
@@ -76,7 +76,7 @@ public class Terrain {
             for(int j=0;j<VERTEX_COUNT;j++){
                 // генерируем вершины
                 vertices[vertexPointer*3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
-                vertices[vertexPointer*3+1] = getHeight(j, i, image);
+                vertices[vertexPointer*3+1] = getHeight(j, i, image); // высота вершины
                 vertices[vertexPointer*3+2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
                 // генерируем нормали
                 Vector3f normal = calculateNormal(j, i, image); // рассчитываем нормаль
@@ -120,10 +120,10 @@ public class Terrain {
             return 0;   // out of bounds
         }
 
-        float height = image.getRGB(x, z);
+        float height = image.getRGB(x, z); // получаем цвет пикселя
         height += MAX_PIXEL_COLOUR / 2f;
-        height /= MAX_PIXEL_COLOUR / 2f;
-        height *= MAX_HEIGHT;
+        height /= MAX_PIXEL_COLOUR / 2f; // преобразовываем в диапазон от -1 до 1
+        height *= MAX_HEIGHT; // получаем конечную высоту вершины
         return height;
     }
     
