@@ -13,6 +13,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import tutorial22.io.Keyboard;
 import tutorial22.models.TexturedModel;
 import tutorial22.renderEngine.DisplayManager;
+import tutorial22.terrains.Terrain;
 
 /**
  * Класс игрока
@@ -47,8 +48,9 @@ public class Player extends Entity {
 
     /**
      * Движение игрока
+     * @param terrain ландшафт на котором стоит игрок
      */
-    public void move() {
+    public void move(Terrain terrain) {
         checkInputs(); // обработка нажатия клавиш
 
         // расчет движения
@@ -67,11 +69,13 @@ public class Player extends Entity {
         upwardsSpeed += GRAVITY * DisplayManager.getDeltaInSeconds();
         // смещаем игрока по оси Y
         super.increasePosition(0, (float) (upwardsSpeed * DisplayManager.getDeltaInSeconds()), 0);
+        // высота ландшафта в позиции игрока
+        float terrainHeight = terrain.getHeightsOfTerrain(super.getPosition().x, super.getPosition().z);
         // проверка позиции игрока, не ниже рельефа
-        if(super.getPosition().y < TERRAIN_HEIGHT) {
+        if(super.getPosition().y < terrainHeight) {
             upwardsSpeed = 0; // сбрасываем скорость падения
             isInAir = false; // игрок приземлился
-            super.getPosition().y = TERRAIN_HEIGHT; // устанавливаем игрока на землю 
+            super.getPosition().y = terrainHeight; // устанавливаем игрока на землю 
         }
     }
     

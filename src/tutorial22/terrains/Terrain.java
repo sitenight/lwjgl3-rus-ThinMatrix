@@ -4,11 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import tutorial22.models.RawModel;
 import tutorial22.renderEngine.Loader;
 import tutorial22.textures.TerrainTexture;
 import tutorial22.textures.TerrainTexturePack;
+import tutorial22.toolbox.Maths;
 
 /**
  * Класс который представляет ландшафт в нашей игре
@@ -29,6 +31,8 @@ public class Terrain {
     private RawModel model; // сетка ландшафта
     private TerrainTexturePack texturePack; // пак текстур ландшафта
     private TerrainTexture blendMap; // карта смешения текстур
+    
+    private float[][] heights; // высоты ландшафта
 
     /**
      * Конструктор ландшафта
@@ -66,6 +70,8 @@ public class Terrain {
         
         int VERTEX_COUNT = image.getHeight(); // кол-во вершин одной стороны ландшафта
         
+        heights = new float[VERTEX_COUNT][VERTEX_COUNT];
+        
         int count = VERTEX_COUNT * VERTEX_COUNT; // количество вершин
         float[] vertices = new float[count * 3];
         float[] normals = new float[count * 3];
@@ -76,7 +82,10 @@ public class Terrain {
             for(int j=0;j<VERTEX_COUNT;j++){
                 // генерируем вершины
                 vertices[vertexPointer*3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
-                vertices[vertexPointer*3+1] = getHeight(j, i, image); // высота вершины
+                // высота вершины
+                float height = getHeight(j, i, image);
+                heights[j][i] = height; // помещаем в массив высот для обнаружения столкновений
+                vertices[vertexPointer*3+1] = height;
                 vertices[vertexPointer*3+2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
                 // генерируем нормали
                 Vector3f normal = calculateNormal(j, i, image); // рассчитываем нормаль
@@ -144,6 +153,50 @@ public class Terrain {
         Vector3f normal= new Vector3f(heightL - heightR, 2.0f, heightD - heightU);
         normal.normalize(); // нормализируем вектор
         return normal;
+    }
+    
+    /**
+     * Метод получения высоты ландшафта по заданным координатам
+     * @param worldX мировые координаты по Х
+     * @param worldZ мировые координаты по Z
+     * @return высоту ландшафта
+     */
+    public float getHeightsOfTerrain(float worldX, float worldZ) {
+        // преобразование мировых координа в положение относительно ландшафта
+        float terrainX = worldX - this.x;
+        float terrainZ = worldZ - this.z;
+        // рассчет размера сетки на ландшафте
+        float gridSquareSize = SIZE / (float)(heights.length - 1) ;
+        // в каком квадрате сетки нужно производить рассчет высоты
+        int gridX = (int) Math.floor(terrainX / gridSquareSize);
+        int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
+        // проверка не выхода за пределы ландшафта
+        if(gridX >= heights.length - 1 || gridZ >= heights.length - 1 ||
+           gridX < 0 || gridZ < 0) {
+            return 0;
+        }
+        // координаты на квадрате ландшафта
+        float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
+        float zCoord = (terrainZ % gridSquareSize) / gridSquareSize;
+        
+        float triangleHeight; // результирующая высота
+        if(xCoord <= (1 - zCoord)) { // выбор треугольника в квадрате ландшафта
+            triangleHeight = Maths.calculateTriangleHeightByBarycentric(
+                    new Vector3f(0, heights[gridX][gridZ], 0), 
+                    new Vector3f(1, heights[gridX + 1][gridZ], 0),
+                    new Vector3f(0, heights[gridX][gridZ + 1], 1),
+                    new Vector2f(xCoord, zCoord) // позиции проверки
+            );
+        } else {
+            triangleHeight = Maths.calculateTriangleHeightByBarycentric(
+                    new Vector3f(1, heights[gridX + 1][gridZ], 0),
+                    new Vector3f(1, heights[gridX + 1][gridZ + 1], 1),
+                    new Vector3f(0, heights[gridX][gridZ + 1], 1),
+                    new Vector2f(xCoord, zCoord)
+            );
+        }
+
+        return triangleHeight;
     }
 
     public float getX() {

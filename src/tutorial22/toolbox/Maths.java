@@ -1,6 +1,7 @@
 package tutorial22.toolbox;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import tutorial22.entities.Camera;
 
@@ -50,6 +51,22 @@ public class Maths {
         viewMatrix.translate(negativeCameraPos);
 
         return viewMatrix;
+    }
+    
+    /**
+     * Рассчет высоты используя центрическую интерполяцию Бари
+     * @param p1 координаты 1 стороны треугольника
+     * @param p2 координаты 2 стороны треугольника
+     * @param p3 координаты 3 стороны треугольника
+     * @param pos позиции в которых нужно найти высоту
+     * @return высоты в выбраной позиции
+     */
+    public static float calculateTriangleHeightByBarycentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos) {
+        float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+        float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
+        float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+        float l3 = 1.0f - l1 - l2;
+        return l1 * p1.y + l2 * p2.y + l3 * p3.y;   // returns height of the triangle at "pos" position
     }
 }
 

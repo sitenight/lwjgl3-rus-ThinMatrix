@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.joml.Matrix4f;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import tutorial22.entities.Camera;
 import tutorial22.entities.Entity;
 import tutorial22.entities.Light;
+import tutorial22.io.Keyboard;
 import tutorial22.models.TexturedModel;
 import tutorial22.shaders.StaticShader;
 import tutorial22.shaders.TerrainShader;
@@ -55,6 +57,18 @@ public class MasterRenderer {
         
         renderer = new EntityRenderer(shader, projectionMatrix);
         terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+    }
+    
+    public void renderOptions() {
+        // включить отобращение сеткой
+        if(Keyboard.isKeyDown(GLFW.GLFW_KEY_1)) {
+            GL11.glLineWidth(1f);
+            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+        }
+        // включить нормальное отобращение, не сеткой
+        if(Keyboard.isKeyDown(GLFW.GLFW_KEY_2)) {
+            GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+        }
     }
     
     /**
